@@ -23,16 +23,16 @@ A  `match`  block declares a  `path`  pattern that is matched against the path f
 // the value of any variables visible within the scope.
 // Partial match.
 match /example/{singleSegment} {   // `singleSegment` == 'hello'
-  allow write;                     // Write rule not evaluated.
+  allow read,write: true;                     // Write rule not evaluated.
   // Complete match.
   match /nested/path {             // `singleSegment` visible in scope.
-    allow read;                    // Read rule is evaluated.
+    allow read: singleSegment == "hello";                    // Read rule is evaluated.
   }
 }
 
 // Complete match.
 match /example/{multiSegment=**} { // `multiSegment` == /hello/nested/path
-  allow read;                      // Read rule is evaluated.
+  allow read: multiSegment != "/hello";                      // Read rule is evaluated.
 }
 ```
 
